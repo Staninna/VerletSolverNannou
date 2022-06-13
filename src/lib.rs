@@ -46,34 +46,34 @@ impl Blob {
     }
 }
 
-// TODO add function to add and remove blobs from the slover
+// TODO add function to add and remove blobs from the solver
 // The physics solver
-pub struct Slover {
+pub struct Solver {
     pub gravity: Vec2, // vec2(0.0, 9.81)
     pub blobs: Vec<Blob>,
 }
 
-impl Slover {
-    // Make new slover object
+impl Solver {
+    // Make new solver object
     pub fn new(blobs: Vec<Blob>, gravity: Vec2) -> Self {
         Self { gravity, blobs }
     }
 
-    // Update all blobs in the slover
+    // Update all blobs in the solver
     pub fn update(&mut self, time: f32) {
-        // Loop over all blobs in the slover
+        // Loop over all blobs in the solver
         for blob in &mut self.blobs {
             // Update blob's gravity
             blob.update_acceleration(self.gravity);
 
-            println!("{}", blob.position_current);
+            // println!("{}", blob.position_current);
             // Update blob's position
             blob.update_position(time);
         }
     }
 
-    // Show all blobs in the slover
-    pub fn show(&self, draw: &Draw) {
+    // Show all blobs in the solver
+    pub fn draw(&self, draw: &Draw) {
         for blob in self.blobs.iter() {
             blob.draw(draw);
         }
