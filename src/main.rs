@@ -19,32 +19,39 @@ fn model(app: &App) -> Model {
     app.new_window().size(512, 512).view(view).build().unwrap();
 
     let mut blobs = Vec::new();
-    for _ in 0..20000 {
-        blobs.push(Blob::new(Vec2::new(0.0, 0.0)));
+    for _ in 0..1 {
+        blobs.push(Blob::new(Vec2::new(20.0, 0.0)));
     }
 
     // Return model struct
     Model {
-        solver: Solver::new(blobs, vec2(0.0, -1.0)),
+        solver: Solver::new(blobs, vec2(0.0, 0.0)),
     }
 }
 
 // Update app data struct
 fn update(_app: &App, model: &mut Model, _update: Update) {
-    model.solver.update(0.1);
+    model.solver.update(0.01);
 }
 
 // Real main function
 fn view(app: &App, model: &Model, frame: Frame) {
-    // Setup window draw surface
+    // Debug info
     let start = Instant::now();
+
+    // Setup window draw surface
     let draw = app.draw();
 
+    // Draw to window background
     draw.background().color(BLACK);
 
+    // Draw all the blobs in the solver
     model.solver.draw(&draw);
 
+    // Write to the window frame
     draw.to_frame(app, &frame).unwrap();
+
+    // Debug info
     let duration = start.elapsed();
     println!("FPS: {:?}", duration);
 }
