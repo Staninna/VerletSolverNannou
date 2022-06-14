@@ -3,9 +3,9 @@ use nannou::prelude::*;
 
 // A physics object
 pub struct Blob {
-    pub position_current: Vec2,
-    pub position_old: Vec2,
-    pub acceleration: Vec2,
+    position_current: Vec2,
+    position_old: Vec2,
+    acceleration: Vec2,
 }
 
 impl Blob {
@@ -66,7 +66,6 @@ impl Solver {
             // Update blob's gravity
             blob.update_acceleration(self.gravity);
 
-            // println!("{}", blob.position_current);
             // Update blob's position
             blob.update_position(time);
         }
@@ -77,6 +76,16 @@ impl Solver {
         for blob in self.blobs.iter() {
             blob.draw(draw);
         }
+    }
+
+    // Add a new blob to the solver
+    pub fn add_blob(&mut self, blob: Blob) {
+        self.blobs.push(blob);
+    }
+
+    // Remove a blob from the solver
+    pub fn remove_blob(&mut self, index: usize) {
+        self.blobs.remove(index);
     }
 }
 
