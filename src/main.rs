@@ -1,6 +1,6 @@
 // Import
 use nannou::prelude::*;
-use std::time::Instant;
+// use std::time::Instant;
 use verlet_solver_nannou::*;
 
 // Entry point
@@ -25,25 +25,22 @@ fn model(app: &App) -> Model {
 
     // Return model struct
     Model {
-        solver: Solver::new(blobs, vec2(0.0, 0.0)),
+        solver: Solver::new(blobs, vec2(0.0, -30.0)),
     }
 }
 
 // Update app data struct
 fn update(_app: &App, model: &mut Model, _update: Update) {
-    model.solver.update(0.01);
+    model.solver.update(0.05);
 }
 
 // Real main function
 fn view(app: &App, model: &Model, frame: Frame) {
-    // Debug info
-    let start = Instant::now();
+    // // Debug info
+    // let start = Instant::now();
 
     // Setup window draw surface
     let draw = app.draw();
-
-    // Draw to window background
-    draw.background().color(BLACK);
 
     // Draw all the blobs in the solver
     model.solver.draw(&draw);
@@ -51,7 +48,7 @@ fn view(app: &App, model: &Model, frame: Frame) {
     // Write to the window frame
     draw.to_frame(app, &frame).unwrap();
 
-    // Debug info
-    let duration = start.elapsed();
-    println!("FPS: {:?}", duration);
+    // // Debug info
+    // let duration = start.elapsed();
+    // println!("FPS: {:?}", duration);
 }
