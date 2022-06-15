@@ -20,7 +20,11 @@ fn model(app: &App) -> Model {
     // Generate blobs
     let mut blobs: Vec<Blob> = Vec::new();
     for _ in 0..1 {
-        blobs.push(Blob::new(vec2(80.0, 20.0), 30.0))
+        blobs.push(Blob::new(
+            vec2(80.0, 20.0),
+            30.0,
+            Rgb::new(255.0, 0.0, 90.0),
+        ));
     }
 
     Model {
@@ -30,7 +34,7 @@ fn model(app: &App) -> Model {
 
 // Update app data struct
 fn update(_app: &App, model: &mut Model, _update: Update) {
-    model.solver.update(0.01);
+    model.solver.update(0.1);
 }
 
 // Draw window

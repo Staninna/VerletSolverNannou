@@ -6,16 +6,18 @@ pub struct Blob {
     position_current: Vec2,
     position_old: Vec2,
     acceleration: Vec2,
+    color: Rgb,
     size: f32,
 }
 
 impl Blob {
     // Make new blob object
-    pub fn new(position_current: Vec2, size: f32) -> Self {
+    pub fn new(position_current: Vec2, size: f32, color: Rgb) -> Self {
         Self {
             position_current,
             position_old: position_current,
             acceleration: Vec2::ZERO,
+            color,
             size,
         }
     }
@@ -54,7 +56,8 @@ impl Blob {
     fn draw(&self, draw: &Draw) {
         draw.ellipse()
             .xy(self.position_current)
-            .wh(vec2(self.size, self.size));
+            .radius(self.size / 2.0)
+            .color(self.color);
     }
 }
 
@@ -65,7 +68,7 @@ struct Constraint {
 }
 
 impl Constraint {
-    pub fn new(position: Vec2, radius: f32) -> Self {
+    fn new(position: Vec2, radius: f32) -> Self {
         Self { position, radius }
     }
 }
