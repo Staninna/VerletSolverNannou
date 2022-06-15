@@ -15,7 +15,7 @@ impl Blob {
         Self {
             position_current,
             position_old: position_current,
-            acceleration: Vec2::new(0.0, 0.0),
+            acceleration: Vec2::ZERO,
             size: 50.0,
         }
     }
@@ -24,7 +24,6 @@ impl Blob {
     fn update_position(&mut self, time: f32) {
         // Set velocity
         let velocity: Vec2 = self.position_current - self.position_old;
-        let time: Vec2 = Vec2::new(time, time);
 
         // Update old position
         self.position_old = self.position_current;
@@ -33,7 +32,7 @@ impl Blob {
         self.position_current = self.position_current + velocity + self.acceleration * time * time;
 
         // Reset acceleration
-        self.acceleration = Vec2::new(0.0, 0.0);
+        self.acceleration = Vec2::ZERO;
     }
 
     // Apply acceleration force to blob
@@ -44,7 +43,7 @@ impl Blob {
 
     fn update_constraints(&mut self) {
         // Set up the constraint radius
-        let position = Vec2::new(0.0, 0.0);
+        let position = Vec2::ZERO;
         let radius = 2000.0;
 
         // Calculate the distance between the blob and the constraint
@@ -68,7 +67,6 @@ impl Blob {
     }
 }
 
-// TODO add function to add and remove blobs from the solver
 // The physics solver
 pub struct Solver {
     pub gravity: Vec2, // vec2(0.0, 9.81)
