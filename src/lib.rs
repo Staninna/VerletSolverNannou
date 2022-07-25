@@ -1,7 +1,8 @@
 // Imports
 use nannou::prelude::*;
 
-// A physics object
+// A physics object that can be moved around.
+#[derive(Clone, Debug)]
 pub struct Blob {
     position_current: Vec2,
     position_old: Vec2,
@@ -52,6 +53,20 @@ impl Blob {
         }
     }
 
+    fn update_collision(&mut self, blobs: &mut Vec<Blob>) {
+        for other in blobs {
+            println!("update:\n{:#?}", other);
+            let collision_axis = self.position_current - other.position_current;
+            let distance = collision_axis.length();
+            if distance < 100.0 {
+                let n = collision_axis / distance;
+                let delta = 100.0 - distance;
+                self.position_current += 0.5 * n * delta;
+                other.position_current -= 0.5 * n * delta;
+            };
+        }
+    }
+
     // Show blob to the screen
     fn draw(&self, draw: &Draw) {
         draw.ellipse()
@@ -92,15 +107,45 @@ impl Solver {
 
     // Update all blobs in the solver
     pub fn update(&mut self, time: f32) {
-        // Loop over all blobs in the solver
+        self.solve_acceleration();
+        self.solve_constraint();
+        self.solve_collision();
+        self.solve_position(time);
+    }
+
+    // Update blob's gravity
+    fn solve_acceleration(&mut self) {
         for blob in &mut self.blobs {
-            // Update blob's gravity
             blob.update_acceleration(self.gravity);
+        }
+    }
 
-            // Update blob's constrain
+    // Update blob's constraint
+    fn solve_constraint(&mut self) {
+        for blob in &mut self.blobs {
             blob.update_constraint(self.constraint.position, self.constraint.radius);
+        }
+    }
 
-            // Update blob's position
+    // Update blob's collision
+    fn solve_collision(&mut self) {
+        // TODO positions are broken
+        let mut temp_blobs = self.blobs.clone();
+        for _ in 0..temp_blobs.len() {
+            for index in 0..temp_blobs.len() {
+                println!("solve:\n{:#?}", temp_blobs[index]);
+                temp_blobs[index].update_collision(&mut self.blobs);
+            }
+            // for blob in &mut blobs.0 {
+            //     blob.update_collision(&mut blobs);
+            // }
+        }
+        self.blobs = temp_blobs;
+    }
+
+    // Update blob's position
+    fn solve_position(&mut self, time: f32) {
+        for blob in &mut self.blobs {
             blob.update_position(time);
         }
     }

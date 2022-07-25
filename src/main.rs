@@ -19,13 +19,22 @@ fn model(app: &App) -> Model {
 
     // Generate blobs
     let mut blobs: Vec<Blob> = Vec::new();
-    for _ in 0..1 {
-        blobs.push(Blob::new(
-            vec2(170.0, 0.0),
-            30.0,
-            Rgb::new(255.0, 0.0, 90.0),
-        ));
-    }
+
+    blobs.push(Blob::new(
+        vec2(170.0, 0.0),
+        30.0,
+        Rgb::new(255.0, 0.0, 90.0),
+    ));
+    blobs.push(Blob::new(
+        vec2(-150.0, 20.0),
+        30.0,
+        Rgb::new(255.0, 0.0, 90.0),
+    ));
+    blobs.push(Blob::new(
+        vec2(170.0, 0.0),
+        30.0,
+        Rgb::new(255.0, 0.0, 90.0),
+    ));
 
     Model {
         solver: Solver::new(blobs),
