@@ -53,21 +53,8 @@ impl Blob {
         }
     }
 
-    fn update_collision(&mut self, blobs: &mut Vec<Blob>) {
-        for other in blobs {
-            let collision_axis = self.position_current - other.position_current;
-            let distance = collision_axis.length();
-            let distance_between_centers = self.size / 2.0 + other.size / 2.0;
-            if distance == 0.0 {
-                continue;
-            } else if distance < distance_between_centers {
-                let n = collision_axis / distance;
-                let delta = distance_between_centers - distance;
-                let offset = n * delta;
-                self.position_current += offset;
-                other.position_current -= offset;
-            };
-        }
+    fn update_collision(&mut self, other: &mut Blob) {
+        println!("{:#?}", other.acceleration)
     }
 
     // Show blob to the screen
@@ -132,13 +119,17 @@ impl Solver {
 
     // Update blob's collision
     fn solve_collision(&mut self) {
-        let mut temp_blobs = self.blobs.clone();
-        for _ in 0..temp_blobs.len() {
-            for index in 0..temp_blobs.len() {
-                temp_blobs[index].update_collision(&mut self.blobs);
+        let object_count = self.blobs.len();
+        for i in 0..object_count {
+            let first = &mut self.blobs[i];
+            for j in 0..object_count {
+                if i == j {
+                    continue;
+                };
+                let second = &mut self.blobs[j];
+                first.update_collision(second)
             }
         }
-        self.blobs = temp_blobs;
     }
 
     // Update blob's position
