@@ -1,5 +1,6 @@
 // Import
 use nannou::prelude::*;
+use rand::Rng;
 use verlet_solver_nannou::*;
 
 // Entry point
@@ -20,21 +21,28 @@ fn model(app: &App) -> Model {
     // Generate blobs
     let mut blobs: Vec<Blob> = Vec::new();
 
-    blobs.push(Blob::new(
-        vec2(170.0, 0.0),
-        30.0,
-        Rgb::new(255.0, 0.0, 90.0),
-    ));
-    blobs.push(Blob::new(
-        vec2(-150.0, 20.0),
-        30.0,
-        Rgb::new(255.0, 0.0, 90.0),
-    ));
-    blobs.push(Blob::new(
-        vec2(170.0, 0.0),
-        30.0,
-        Rgb::new(255.0, 0.0, 90.0),
-    ));
+    // Make random blobs
+    let mut rng = rand::thread_rng();
+
+    // Set boundaries
+    let position_bound = 0.0..100.0;
+    let size_bound = 0.0..25.0;
+    let color_bound = 0.0..1.0;
+
+    for _ in 0..150 {
+        blobs.push(Blob::new(
+            vec2(
+                rng.gen_range(position_bound.clone()),
+                rng.gen_range(position_bound.clone()),
+            ),
+            rng.gen_range(size_bound.clone()),
+            Rgb::new(
+                rng.gen_range(color_bound.clone()),
+                rng.gen_range(color_bound.clone()),
+                rng.gen_range(color_bound.clone()),
+            ),
+        ));
+    }
 
     Model {
         solver: Solver::new(blobs),

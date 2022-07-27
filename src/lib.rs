@@ -55,14 +55,17 @@ impl Blob {
 
     fn update_collision(&mut self, blobs: &mut Vec<Blob>) {
         for other in blobs {
-            println!("update:\n{:#?}", other);
             let collision_axis = self.position_current - other.position_current;
             let distance = collision_axis.length();
-            if distance < 100.0 {
+            let distance_between_centers = self.size / 2.0 + other.size / 2.0;
+            if distance == 0.0 {
+                continue;
+            } else if distance < distance_between_centers {
                 let n = collision_axis / distance;
-                let delta = 100.0 - distance;
-                self.position_current += 0.5 * n * delta;
-                other.position_current -= 0.5 * n * delta;
+                let delta = distance_between_centers - distance;
+                let offset = n * delta;
+                self.position_current += offset;
+                other.position_current -= offset;
             };
         }
     }
@@ -129,16 +132,11 @@ impl Solver {
 
     // Update blob's collision
     fn solve_collision(&mut self) {
-        // TODO positions are broken
         let mut temp_blobs = self.blobs.clone();
         for _ in 0..temp_blobs.len() {
             for index in 0..temp_blobs.len() {
-                println!("solve:\n{:#?}", temp_blobs[index]);
                 temp_blobs[index].update_collision(&mut self.blobs);
             }
-            // for blob in &mut blobs.0 {
-            //     blob.update_collision(&mut blobs);
-            // }
         }
         self.blobs = temp_blobs;
     }
