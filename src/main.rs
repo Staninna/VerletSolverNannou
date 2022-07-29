@@ -25,11 +25,11 @@ fn model(app: &App) -> Model {
     let mut rng = rand::thread_rng();
 
     // Set boundaries
-    let position_bound = 0.0..100.0;
-    let size_bound = 0.0..25.0;
+    let position_bound = -200.0..200.0;
+    let size_bound = 3.0..15.0;
     let color_bound = 0.0..1.0;
 
-    for _ in 0..150 {
+    for _ in 0..1200 {
         blobs.push(Blob::new(
             vec2(
                 rng.gen_range(position_bound.clone()),
@@ -45,13 +45,19 @@ fn model(app: &App) -> Model {
     }
 
     Model {
-        solver: Solver::new(blobs),
+        solver: Solver::new(
+            blobs,
+            vec2(0.0, -100000.0),
+            Constraint::new(Vec2::ZERO, 300.0),
+            10,
+            0.01,
+        ),
     }
 }
 
 // Update app data struct
 fn update(_app: &App, model: &mut Model, _update: Update) {
-    model.solver.update(0.01);
+    model.solver.update();
 }
 
 // Draw window
