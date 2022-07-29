@@ -29,7 +29,7 @@ fn model(app: &App) -> Model {
     let size_bound = 3.0..15.0;
     let color_bound = 0.0..1.0;
 
-    for _ in 0..1200 {
+    for _ in 0..500 {
         blobs.push(Blob::new(
             vec2(
                 rng.gen_range(position_bound.clone()),
